@@ -1,17 +1,18 @@
 package routes
 
 import (
-	"github.com/NaufalHSyahputra/learn-golang/app/controllers/book"
+	"learn-go-fiber/app/controllers"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func ApiRoutes(app fiber.Router) {
-	r := app.Group("api")
+	apiRoutes := app.Group("api")
 
-	ApiUser(r)
+	todoRoutes := apiRoutes.Group("todo")
 
-	bookRoutes := r.Group("book")
+	todoRoutes.Get("/", controllers.GetTodo)
+	todoRoutes.Get("/create", controllers.InsertTodo)
+	todoRoutes.Get("/:id", controllers.GetSingleTodo)
 
-	bookRoutes.Get("/", book.GetBook)
 }
