@@ -7,12 +7,21 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+type TodoResponse struct {
+	Id          int
+	Name        string
+	IsCompleted string
+	UserId      int
+	UserName    string
+}
+
 func GetTodo(c *fiber.Ctx) error {
 	db := config.GetDBInstance()
 	todos := []models.Todo{}
-	if err := db.Find(&todos).Error; err != nil {
+	if err := db.Preload("User").Find(&todos).Error; err != nil {
 		return c.Status(400).JSON(err)
 	}
+
 	return c.JSON(todos)
 }
 
