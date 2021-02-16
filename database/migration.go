@@ -24,20 +24,33 @@ func InitSeeding(db *gorm.DB) {
 }
 
 func UserSeeder(db *gorm.DB) {
-	user := models.User{
-		Name:     "Naufal",
-		Email:    "naufal@test.com",
-		Password: "$2y$12$0pFrZPFPTAJWw85GgIWXD.fEkYIcdJ//RBsGzC2EqglArI6W/Ugu2", //password
+	user := []models.User{
+		{
+			Name:     "Naufal",
+			Email:    "naufal@test.com",
+			Password: "$2y$12$0pFrZPFPTAJWw85GgIWXD.fEkYIcdJ//RBsGzC2EqglArI6W/Ugu2", //password
+		},
+		{
+			Name:     "Naufal2",
+			Email:    "naufal2@test.com",
+			Password: "$2y$12$0pFrZPFPTAJWw85GgIWXD.fEkYIcdJ//RBsGzC2EqglArI6W/Ugu2", //password
+		},
 	}
 	db.Create(&user)
 }
 
 func TodoSeeder(db *gorm.DB) {
 	todos := []models.Todo{
-		{UserID: 1, Name: "Belajar Golang", IsCompleted: false},
-		{UserID: 1, Name: "Belajar Docker", IsCompleted: false},
-		{UserID: 1, Name: "Belajar Kubernetes", IsCompleted: false},
-		{UserID: 1, Name: "Belajar Flutter", IsCompleted: false},
+		// {UserID: 1, Name: "Belajar Golang", IsCompleted: false},
+		// {UserID: 1, Name: "Belajar Docker", IsCompleted: false},
+		// {UserID: 1, Name: "Belajar Kubernetes", IsCompleted: false},
+		// {UserID: 1, Name: "Belajar Flutter", IsCompleted: false},
+		{UserID: 2, Name: "Belajar Golang", IsCompleted: false},
+		{UserID: 2, Name: "Belajar Docker", IsCompleted: false},
+		{UserID: 2, Name: "Belajar Kubernetes", IsCompleted: false},
+		{UserID: 3, Name: "Belajar Flutter", IsCompleted: false},
+		{UserID: 3, Name: "Belajar Docker", IsCompleted: false},
+		{UserID: 3, Name: "Belajar Kubernetes", IsCompleted: false},
 	}
 	db.Create(&todos)
 }

@@ -8,31 +8,38 @@ import (
 )
 
 type TodoResponse struct {
-	Id          int
-	Name        string
-	IsCompleted string
-	UserId      int
-	UserName    string
+	ID uint `json:"id";gorm:"primarykey"`
+	// UserID      uint   `json:"user_id"`
+	Name        string `json:"name"`
+	IsCompleted bool   `json:"is_completed"`
+	UserName    string `json:"user_name"`
 }
 
 func GetTodo(c *fiber.Ctx) error {
 	db := config.GetDBInstance()
+	// todos := []models.Todo{}
+	// if err := db.Find(&todos).Error; err != nil {
+	// 	return c.Status(400).JSON(err)
+	// }
+	result := []TodoResponse{}
 	todos := []models.Todo{}
-	if err := db.Preload("User").Find(&todos).Error; err != nil {
+	// db.Model(&todos).Find(&result)
+
+	if err := db.Model(&todos).Select("todos.id", "todos.name", "user.name as user_name", "todos.user_id", "todos.is_completed").Joins("User").Where("user.id = ?", 1).Find(&result).Error; err != nil {
 		return c.Status(400).JSON(err)
 	}
-
-	return c.JSON(todos)
+	return c.JSON(result)
 }
 
 func GetSingleTodo(c *fiber.Ctx) error {
 	id := c.Params("id")
 	db := config.GetDBInstance()
 	todos := []models.Todo{}
-	if err := db.Find(&todos, id).Error; err != nil {
+	result := []TodoResponse{}
+	if err := db.Model(todos).Select("todos.id", "todos.name", "user.name as user_name", "todos.user_id", "todos.is_completed").Joins("User").Where("user.id = ?", 1).Find(&result, id).Error; err != nil {
 		return c.Status(400).JSON(err)
 	}
-	return c.JSON(todos)
+	return c.JSON(result)
 }
 
 func InsertTodo(c *fiber.Ctx) error {
