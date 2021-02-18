@@ -19,14 +19,8 @@ type TodoResponse struct {
 
 func GetTodo(c *fiber.Ctx) error {
 	db := config.GetDBInstance()
-	// todos := []models.Todo{}
-	// if err := db.Find(&todos).Error; err != nil {
-	// 	return c.Status(400).JSON(err)
-	// }
 	result := []TodoResponse{}
 	todos := []models.Todo{}
-	// db.Model(&todos).Find(&result)
-
 	if err := db.Model(&todos).Select("todos.id", "todos.name", "user.name as user_name", "todos.user_id", "todos.is_completed").Joins("User").Where("user.id = ?", 1).Find(&result).Error; err != nil {
 		return c.Status(400).JSON(err)
 	}
@@ -45,9 +39,6 @@ func GetSingleTodo(c *fiber.Ctx) error {
 }
 
 func InsertTodo(c *fiber.Ctx) error {
-
-	// db := config.GetDBInstance()
-	// result := db.Create(&newTodo)
 	p := new(request.TodoForm)
 	if err := c.BodyParser(p); err != nil {
 		return err
