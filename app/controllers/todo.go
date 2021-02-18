@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"learn-go-fiber/app/models"
+	request "learn-go-fiber/app/requests"
 	"learn-go-fiber/config"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gookit/validate"
 )
 
 type TodoResponse struct {
@@ -43,11 +45,29 @@ func GetSingleTodo(c *fiber.Ctx) error {
 }
 
 func InsertTodo(c *fiber.Ctx) error {
+
+	// db := config.GetDBInstance()
+	// result := db.Create(&newTodo)
+	p := new(request.TodoForm)
+	if err := c.BodyParser(p); err != nil {
+		return err
+	}
+	v := validate.Struct(p)
+	if !v.Validate() {
+		return c.JSON(fiber.Map{
+			"message": v.Errors.One(),
+		})
+	}
 	newTodo := models.Todo{
-		Name:        "Learn Python",
-		IsCompleted: false,
+		Name:        p.Name,
+		IsCompleted: p.IsCompleted,
+		UserID:      1,
 	}
 	db := config.GetDBInstance()
-	result := db.Create(&newTodo)
-	return c.JSON(result.RowsAffected)
+	if err := db.Create(&newTodo).Error; err != nil {
+		return c.Status(400).JSON(err)
+	}
+	return c.JSON(fiber.Map{
+		"message": "Create Todo Success!",
+	})
 }

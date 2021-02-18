@@ -12,7 +12,7 @@ func ApiRoutes(app fiber.Router) {
 	todoRoutes := apiRoutes.Group("todo")
 
 	todoRoutes.Get("/", controllers.GetTodo)
-	todoRoutes.Get("/create", controllers.InsertTodo)
+	todoRoutes.Post("/create", controllers.InsertTodo)
 	todoRoutes.Get("/:id", controllers.GetSingleTodo)
 
 }

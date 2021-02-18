@@ -7,6 +7,8 @@ require (
 	github.com/creack/pty v1.1.11 // indirect
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/gofiber/fiber/v2 v2.5.0
+	github.com/gookit/goutil v0.3.8 // indirect
+	github.com/gookit/validate v1.2.8 // indirect
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/pelletier/go-toml v1.8.1 // indirect
