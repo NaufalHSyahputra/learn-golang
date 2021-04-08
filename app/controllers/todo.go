@@ -3,7 +3,7 @@ package controllers
 import (
 	"learn-go-fiber/app/models"
 	request "learn-go-fiber/app/requests"
-	"learn-go-fiber/config"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gookit/validate"
@@ -18,22 +18,23 @@ type TodoResponse struct {
 }
 
 func GetTodo(c *fiber.Ctx) error {
-	db := config.GetDBInstance()
 	result := []TodoResponse{}
-	todos := []models.Todo{}
-	if err := db.Model(&todos).Select("todos.id", "todos.name", "user.name as user_name", "todos.user_id", "todos.is_completed").Joins("User").Where("user.id = ?", 1).Find(&result).Error; err != nil {
-		return c.Status(400).JSON(err)
+	todos := models.Todo{}
+	if err := todos.GetTodo("todos.id", "todos.name", "user.name as user_name", "todos.user_id", "todos.is_completed").Find(&result); err.Error != nil {
+		return c.Status(400).JSON(err.Error)
 	}
 	return c.JSON(result)
 }
 
 func GetSingleTodo(c *fiber.Ctx) error {
-	id := c.Params("id")
-	db := config.GetDBInstance()
-	todos := []models.Todo{}
-	result := []TodoResponse{}
-	if err := db.Model(todos).Select("todos.id", "todos.name", "user.name as user_name", "todos.user_id", "todos.is_completed").Joins("User").Where("user.id = ?", 1).Find(&result, id).Error; err != nil {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
 		return c.Status(400).JSON(err)
+	}
+	result := []TodoResponse{}
+	todos := models.Todo{}
+	if err := todos.GetTodoById(id, "todos.id", "todos.name", "user.name as user_name", "todos.user_id", "todos.is_completed").Find(&result, id); err.Error != nil {
+		return c.Status(400).JSON(err.Error)
 	}
 	return c.JSON(result)
 }
@@ -54,9 +55,12 @@ func InsertTodo(c *fiber.Ctx) error {
 		IsCompleted: p.IsCompleted,
 		UserID:      1,
 	}
-	db := config.GetDBInstance()
-	if err := db.Create(&newTodo).Error; err != nil {
-		return c.Status(400).JSON(err)
+
+	err := newTodo.CreateTodo()
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"message": err,
+		})
 	}
 	return c.JSON(fiber.Map{
 		"message": "Create Todo Success!",

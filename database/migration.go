@@ -41,10 +41,10 @@ func UserSeeder(db *gorm.DB) {
 
 func TodoSeeder(db *gorm.DB) {
 	todos := []models.Todo{
-		// {UserID: 1, Name: "Belajar Golang", IsCompleted: false},
-		// {UserID: 1, Name: "Belajar Docker", IsCompleted: false},
-		// {UserID: 1, Name: "Belajar Kubernetes", IsCompleted: false},
-		// {UserID: 1, Name: "Belajar Flutter", IsCompleted: false},
+		{UserID: 1, Name: "Belajar Golang", IsCompleted: false},
+		{UserID: 1, Name: "Belajar Docker", IsCompleted: false},
+		{UserID: 1, Name: "Belajar Kubernetes", IsCompleted: false},
+		{UserID: 1, Name: "Belajar Flutter", IsCompleted: false},
 		{UserID: 2, Name: "Belajar Golang", IsCompleted: false},
 		{UserID: 2, Name: "Belajar Docker", IsCompleted: false},
 		{UserID: 2, Name: "Belajar Kubernetes", IsCompleted: false},
